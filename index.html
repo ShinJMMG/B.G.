@@ -207,7 +207,7 @@
     }
 
     // --- PÉTALOS ---
-    function spawnPetals(n){
+    function spawnPetals(n, loop=true){
       for(let i=0;i<n;i++){
         const p = document.createElement('img');
         // Elegir imagen aleatoria de las que subiste
@@ -225,6 +225,9 @@
         p.style.setProperty('--scale', scale);
         p.style.setProperty('--dur', dur);
         p.style.setProperty('--delay', delay);
+        if(!loop){
+          p.style.animationIterationCount = '1'; // animar solo una vez
+    }
         document.body.appendChild(p);
       }
     }
