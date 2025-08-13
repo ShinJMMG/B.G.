@@ -208,29 +208,27 @@
 
     // --- PÉTALOS ---
     function spawnPetals(n, loop=true){
-      for(let i=0;i<n;i++){
-        const p = document.createElement('img');
-        // Elegir imagen aleatoria de las que subiste
-        const imgSrc = petalImages[Math.floor(Math.random()*petalImages.length)];
-        p.src = imgSrc;
-        p.className = 'petal';
-        // estilos para animar
-        const startX = Math.random()*100;
-        const drift = (Math.random()*40 - 20);
-        const scale = (Math.random()*0.7 + 0.6).toFixed(2);
-        const dur = (Math.random()*6 + 8).toFixed(2) + 's';
-        const delay = (Math.random()*-10).toFixed(2) + 's';
-        p.style.setProperty('--x-start', startX+'vw');
-        p.style.setProperty('--x-end', (startX + drift)+'vw');
-        p.style.setProperty('--scale', scale);
-        p.style.setProperty('--dur', dur);
-        p.style.setProperty('--delay', delay);
-        if(!loop){
-          p.style.animationIterationCount = '1'; // animar solo una vez
+  for(let i=0;i<n;i++){
+    const p = document.createElement('img');
+    const imgSrc = petalImages[Math.floor(Math.random()*petalImages.length)];
+    p.src = imgSrc;
+    p.className = 'petal';
+    const startX = Math.random()*100;
+    const drift = (Math.random()*40 - 20);
+    const scale = (Math.random()*0.7 + 0.6).toFixed(2);
+    const dur = (Math.random()*6 + 8).toFixed(2) + 's';
+    const delay = (Math.random()*-10).toFixed(2) + 's';
+    p.style.setProperty('--x-start', startX+'vw');
+    p.style.setProperty('--x-end', (startX + drift)+'vw');
+    p.style.setProperty('--scale', scale);
+    p.style.setProperty('--dur', dur);
+    p.style.setProperty('--delay', delay);
+    if(!loop){
+      p.style.animationIterationCount = '1'; // animar solo una vez
     }
-        document.body.appendChild(p);
-      }
-    }
+    document.body.appendChild(p);
+  }
+}
 
     // --- FUEGOS ARTIFICIALES ---
     function startFireworks(){
