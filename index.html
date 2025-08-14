@@ -29,9 +29,11 @@
     .subtitle{ margin:0 0 22px; color:var(--muted); font-weight:400; }
     .input{ width:100%; padding:14px 16px; border-radius:14px; border:1px solid rgba(255,255,255,.25); background:rgba(0,0,0,.25); color:var(--text); font-size:16px; outline:none; transition:.2s; }
     .input:focus{ border-color:var(--accent); box-shadow:0 0 0 6px rgba(255,107,154,.18); }
-    .btn{ width:100%; margin-top:14px; padding:14px 16px; border-radius:16px; border:none; color:#0b0b16; font-weight:700; font-size:16px; cursor:pointer; background:linear-gradient(90deg, #ffd1e6, #ff7aa2, #b388ff); transition: transform .1s ease, box-shadow .2s ease; box-shadow: 0 10px 24px rgba(255,122,162,.28);
+    .btn{ width:100%; margin-top:14px; padding:14px 16px; border-radius:16px; border:none; color:#fff; font-weight:700; font-size:16px; cursor:pointer; background:linear-gradient(90deg, #ff7aa2, #b388ff, #ffd1e6); transition: transform .1s ease, box-shadow .2s ease; box-shadow: 0 10px 24px rgba(255,122,162,.28);
     }
     .btn:active{ transform: translateY(1px); box-shadow: 0 6px 16px rgba(255,122,162,.22); }
+    .btn-romantic{ font-family:"Great Vibes", cursive; font-size:clamp(22px,4vw,32px); padding:16px 24px; background:linear-gradient(120deg,#ff9ec7,#ff7aa2,#b388ff); color:#fff; box-shadow:0 12px 28px rgba(255,107,154,.4); border:none; border-radius:20px; transition: transform .2s ease, box-shadow .2s ease; }
+    .btn-romantic:hover{ transform: translateY(-2px); box-shadow:0 16px 32px rgba(255,107,154,.5); }
     .hint{ margin-top:10px; font-size:12px; color:#e9e9ff; opacity:.8; text-align:center; }
     #login{ background: radial-gradient(80% 80% at 50% 0%, var(--bg2), transparent 70%), radial-gradient(100% 100% at 50% 100%, var(--bg1), var(--bg3)); }
     #frases, #final{ background:#0b0b16; }
@@ -63,8 +65,6 @@
     }
     .overlay{ position:absolute; inset:0; background: radial-gradient(120% 100% at 50% 100%, rgba(255,255,255,.06), transparent 60%); z-index:0;}
     .hidden{ display:none !important; }
-    #startFinal{ margin-top:20px; padding:12px 24px; font-size:18px; border-radius:12px; background:linear-gradient(90deg,#ff7aa2,#b388ff); color:#fff; border:none; cursor:pointer; box-shadow:0 6px 16px rgba(255,122,162,.28); }
-    #startFinal:active{ transform:translateY(1px); box-shadow:0 4px 12px rgba(255,122,162,.22);}
   </style>
 </head>
 <body>
@@ -91,9 +91,11 @@
   </section>
   <section id="final" class="screen hidden">
     <div class="center-col" style="z-index:1; gap:14px; padding: 0 10px;">
-      <h2 class="big-message">¡Feliz cumpleaños, señorita! 🎂✨</h2>
-      <p class="sub">Que cada día de este nuevo año te llene de alegría, amor y magia 💖</p>
-      <button id="startFinal">Reproducir sorpresa final</button>
+      <button id="startFinal" class="btn-romantic">Ver felicitación final 💖</button>
+      <div id="finalContent" class="hidden" style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+        <h2 class="big-message">¡Feliz cumpleaños, preciosa señorita! 🎂✨</h2>
+        <p class="sub">Que cada día de este nuevo año te llene de alegría, amor y magia 💖</p>
+      </div>
     </div>
   </section>
   <audio id="musicLogin" src="assets/musica_login.mp3" preload="auto" loop></audio>
@@ -164,6 +166,7 @@
       let t = totalSeconds;
       const perPhrase = totalSeconds / frases.length;
       pickRomanticGradient();
+      spawnPetals(20); // pétalos mientras se muestran frases
       function tick(){
         const mm = String(Math.floor(t/60)).padStart(2,'0');
         const ss = String(Math.floor(t%60)).padStart(2,'0');
@@ -197,13 +200,16 @@
       };
       window.addEventListener('beforeunload', cleanup, { once:true });
     }
+
     function startFinalStage(){
       const btnStart = $('#startFinal');
+      const finalContent = $('#finalContent');
       btnStart.addEventListener('click', ()=>{
+        btnStart.classList.add('hidden'); // Oculta el botón
+        finalContent.classList.remove('hidden'); // Muestra el contenido final
         stopAll();
-        tryPlay(musicFinal);
-        spawnPetals(40, false);
-        btnStart.remove();
+        tryPlay(musicFinal); // Reproduce la música final
+        spawnPetals(40, false); // Pétalos finales
       }, { once: true });
     }
 
