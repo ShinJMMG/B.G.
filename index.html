@@ -63,6 +63,8 @@
     }
     .overlay{ position:absolute; inset:0; background: radial-gradient(120% 100% at 50% 100%, rgba(255,255,255,.06), transparent 60%); z-index:0;}
     .hidden{ display:none !important; }
+    #startFinal{ margin-top:20px; padding:12px 24px; font-size:18px; border-radius:12px; background:linear-gradient(90deg,#ff7aa2,#b388ff); color:#fff; border:none; cursor:pointer; box-shadow:0 6px 16px rgba(255,122,162,.28); }
+    #startFinal:active{ transform:translateY(1px); box-shadow:0 4px 12px rgba(255,122,162,.22);}
   </style>
 </head>
 <body>
@@ -88,9 +90,10 @@
     </div>
   </section>
   <section id="final" class="screen hidden">
-    <div class="center-col" style="z-index:1; gap:10px; padding: 0 10px;">
+    <div class="center-col" style="z-index:1; gap:14px; padding: 0 10px;">
       <h2 class="big-message">¡Feliz cumpleaños, señorita! 🎂✨</h2>
-      <p class="sub">Que este nuevo año te regale motivos para sonreír, amor bonito y sueños cumplidos.</p>
+      <p class="sub">Que cada día de este nuevo año te llene de alegría, amor y magia 💖</p>
+      <button id="startFinal">Reproducir sorpresa final</button>
     </div>
   </section>
   <audio id="musicLogin" src="assets/musica_login.mp3" preload="auto" loop></audio>
@@ -114,7 +117,6 @@
       'assets/petalo3.png'
     ];
 
-    // Pétalos en cada interfaz desde inicio
     spawnPetals(30);
 
     document.addEventListener('click',()=>{
@@ -195,23 +197,14 @@
       };
       window.addEventListener('beforeunload', cleanup, { once:true });
     }
-
-    // Pantalla final: música y pétalos solo con botón
     function startFinalStage(){
-      document.querySelectorAll('.petal').forEach(p=>p.remove());
-      const finalSection = $('#final');
-      const btnStart = document.createElement('button');
-      btnStart.textContent = '¡Comenzar celebración!';
-      btnStart.className = 'btn';
-      btnStart.style.marginTop = '20px';
-      finalSection.querySelector('.center-col').appendChild(btnStart);
-
+      const btnStart = $('#startFinal');
       btnStart.addEventListener('click', ()=>{
         stopAll();
         tryPlay(musicFinal);
         spawnPetals(40, false);
         btnStart.remove();
-      });
+      }, { once: true });
     }
 
     function spawnPetals(n, loop=true){
