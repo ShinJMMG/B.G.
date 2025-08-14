@@ -61,7 +61,6 @@
       0%{ transform: translate3d(var(--x-start), -10vh, 0) rotate(0deg) scale(var(--scale)); }
       100%{ transform: translate3d(var(--x-end), 110vh, 0) rotate(360deg) scale(var(--scale)); }
     }
-    #fireworks{ position:fixed; inset:0; z-index:0; pointer-events:none; }
     .overlay{ position:absolute; inset:0; background: radial-gradient(120% 100% at 50% 100%, rgba(255,255,255,.06), transparent 60%); z-index:0;}
     .hidden{ display:none !important; }
   </style>
@@ -89,7 +88,6 @@
     </div>
   </section>
   <section id="final" class="screen hidden">
-    <canvas id="fireworks"></canvas>
     <div class="center-col" style="z-index:1; gap:10px; padding: 0 10px;">
       <h2 class="big-message">¡Feliz cumpleaños, señorita! 🎂✨</h2>
       <p class="sub">Que este nuevo año te regale motivos para sonreír, amor bonito y sueños cumplidos.</p>
@@ -110,18 +108,14 @@
     const musicFrases = $('#musicFrases');
     const musicFinal = $('#musicFinal');
 
-    // Añade aquí el array con tus imágenes de pétalos:
     const petalImages = [
       'assets/petalo1.png',
       'assets/petalo2.png',
       'assets/petalo3.png'
-      // añade más si quieres
     ];
 
-    // Petalos desde inicio:
     spawnPetals(30);
 
-    // Para que el usuario pueda iniciar la música con interacción:
     document.addEventListener('click',()=>{
       tryPlay(musicLogin);
     }, { once:true });
@@ -203,83 +197,29 @@
     function startFinalStage(){
       tryPlay(musicFinal);
       spawnPetals(40, false);
-      startFireworks();
     }
 
-    // --- PÉTALOS ---
     function spawnPetals(n, loop=true){
-  for(let i=0;i<n;i++){
-    const p = document.createElement('img');
-    const imgSrc = petalImages[Math.floor(Math.random()*petalImages.length)];
-    p.src = imgSrc;
-    p.className = 'petal';
-    const startX = Math.random()*100;
-    const drift = (Math.random()*40 - 20);
-    const scale = (Math.random()*0.7 + 0.6).toFixed(2);
-    const dur = (Math.random()*6 + 8).toFixed(2) + 's';
-    const delay = (Math.random()*-10).toFixed(2) + 's';
-    p.style.setProperty('--x-start', startX+'vw');
-    p.style.setProperty('--x-end', (startX + drift)+'vw');
-    p.style.setProperty('--scale', scale);
-    p.style.setProperty('--dur', dur);
-    p.style.setProperty('--delay', delay);
-    if(!loop){
-      p.style.animationIterationCount = '1'; // animar solo una vez
-    }
-    document.body.appendChild(p);
-  }
-}
-
-    // --- FUEGOS ARTIFICIALES ---
-    function startFireworks(){
-      const c = document.getElementById('fireworks');
-      const ctx = c.getContext('2d');
-      let W, H, shots=[];
-      function resize(){
-        W = c.width = window.innerWidth * devicePixelRatio;
-        H = c.height = window.innerHeight * devicePixelRatio;
-      }
-      resize();
-      window.addEventListener('resize', resize);
-      function boom(x,y,colors){
-        const parts = 80;
-        for(let i=0;i<parts;i++){
-          const angle = Math.random()*Math.PI*2;
-          const speed = Math.random()*3+1.2;
-          shots.push({ x:x, y:y, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed, life:1, clr: colors[Math.floor(Math.random()*colors.length)] });
+      for(let i=0;i<n;i++){
+        const p = document.createElement('img');
+        const imgSrc = petalImages[Math.floor(Math.random()*petalImages.length)];
+        p.src = imgSrc;
+        p.className = 'petal';
+        const startX = Math.random()*100;
+        const drift = (Math.random()*40 - 20);
+        const scale = (Math.random()*0.7 + 0.6).toFixed(2);
+        const dur = (Math.random()*6 + 8).toFixed(2) + 's';
+        const delay = (Math.random()*-10).toFixed(2) + 's';
+        p.style.setProperty('--x-start', startX+'vw');
+        p.style.setProperty('--x-end', (startX + drift)+'vw');
+        p.style.setProperty('--scale', scale);
+        p.style.setProperty('--dur', dur);
+        p.style.setProperty('--delay', delay);
+        if(!loop){
+          p.style.animationIterationCount = '1';
         }
+        document.body.appendChild(p);
       }
-      function launch(){
-        const x = (Math.random()*0.7+0.15)*W;
-        const y = (Math.random()*0.4+0.2)*H;
-        const palettes = [ ['#ffd1e6','#ff7aa2','#b388ff'], ['#fff0d6','#ffc2d1','#c6b8ff'], ['#ffe7a3','#ff9bbb','#a7c4ff'] ];
-        boom(x,y, palettes[Math.floor(Math.random()*palettes.length)] );
-      }
-      function draw(){
-        ctx.clearRect(0,0,W,H);
-        for(let i=shots.length-1;i>=0;i--){
-          let s = shots[i];
-          s.x += s.vx;
-          s.y += s.vy;
-          s.vy += 0.07;
-          s.life -= 0.015;
-          ctx.beginPath();
-          ctx.fillStyle = s.clr;
-          ctx.shadowColor = s.clr;
-          ctx.shadowBlur = 10;
-          ctx.arc(s.x,s.y,3,0,Math.PI*2);
-          ctx.fill();
-          if(s.life <= 0 || s.y > H){
-            shots.splice(i,1);
-          }
-        }
-      }
-      setInterval(launch, 700);
-      function loop(){
-        draw();
-        requestAnimationFrame(loop);
-      }
-      loop();
     }
   </script>
 </body>
