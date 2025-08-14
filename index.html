@@ -114,6 +114,7 @@
       'assets/petalo3.png'
     ];
 
+    // Pétalos en cada interfaz desde inicio
     spawnPetals(30);
 
     document.addEventListener('click',()=>{
@@ -194,18 +195,23 @@
       };
       window.addEventListener('beforeunload', cleanup, { once:true });
     }
-      function startFinalStage(){
-  // Detener música anterior y reproducir solo la final
-  stopAll();
-  tryPlay(musicFinal);
 
-  // Eliminar pétalos antiguos del DOM antes de crear nuevos
-  document.querySelectorAll('.petal').forEach(p=>p.remove());
+    // Pantalla final: música y pétalos solo con botón
+    function startFinalStage(){
+      document.querySelectorAll('.petal').forEach(p=>p.remove());
+      const finalSection = $('#final');
+      const btnStart = document.createElement('button');
+      btnStart.textContent = '¡Comenzar celebración!';
+      btnStart.className = 'btn';
+      btnStart.style.marginTop = '20px';
+      finalSection.querySelector('.center-col').appendChild(btnStart);
 
-  // Crear pétalos finales de forma controlada
-  spawnPetals(40, false);
-}
-
+      btnStart.addEventListener('click', ()=>{
+        stopAll();
+        tryPlay(musicFinal);
+        spawnPetals(40, false);
+        btnStart.remove();
+      });
     }
 
     function spawnPetals(n, loop=true){
